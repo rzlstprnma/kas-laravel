@@ -14,15 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/home', 'HomeController@index');
+    Route::get('/', 'HomeController@index');
     Route::get('/logout', 'HomeController@logout');
     Route::resource('kategori-pengeluaran', 'ExpenseCategoryController');
     Route::resource('pengeluaran', 'ExpenseController');
     Route::resource('pemasukan', 'IncomeController');
-
-    // laporan
-    Route::get('/laporan/pengeluaran', 'ExpenseController@report');
-    Route::get('/laporan/pemasukan', 'IncomeController@report');
 
     // api
     Route::get('/api/kategori', 'ExpenseCategoryController@data')->name('api.kategori');

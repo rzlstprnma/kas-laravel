@@ -46,8 +46,8 @@ class ExpenseCategoryController extends Controller
         if($validation->fails()){
             return response()->json([
                 'message' => 'Error, Ada kesalahan dalam pengisian Data',
-                'data'   => $validation->errors()
-            ],401);
+                'errors'   => $validation->errors()
+            ]);
         }else{
             ExpenseCategory::create(['user_id' => $request->user_id, 'category_name' => $request->category_name]);
             return response()->json(["msg"   => "Data berhasil disimpan"]);
@@ -82,8 +82,8 @@ class ExpenseCategoryController extends Controller
         if($validation->fails()){
             return response()->json([
                 'message' => 'Error, Ada kesalahan dalam pengisian Data',
-                'data'   => $validation->errors()
-            ],401);
+                'errors'   => $validation->errors()
+            ]);
         }else{
             $expenseCategory = ExpenseCategory::find($id);
             $expenseCategory->update(['user_id' => $request->user_id, 'category_name' => $request->category_name]);

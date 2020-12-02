@@ -67,17 +67,32 @@
             </button>
         </div>
         <div class="modal-body">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <form method="post" id="income_form">
                 @csrf
                 <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                 <input type="hidden" name="id" value="">
                 <div class="form-group">
                     <label>Nama Pemasukan</label>
-                    <input type="text" class="form-control" name="income_name">
+                    <input type="text" @error('income_name') is-invalid @enderror name="income_name" value="{{ old('income_name') }}" class="form-control">
+                    @error('income_name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="income_name_error">{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Jumlah Pemasukan</label>
-                    <input type="number" class="form-control" name="nominal">
+                    <input type="number" class="form-control" @error('nominal') is-invalid @enderror name="nominal" value="{{ old('nominal') }}">
+                    @error('nominal')
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="nominal_error">{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
         </div>
         <div class="modal-footer">
@@ -105,9 +120,7 @@
 <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
 
-
 <script>    
-
         var table = {};
 
         loadData();
@@ -185,10 +198,18 @@
                     type: 'POST',
                     url: "{{route('pemasukan.store')}}",
                     data: $('form').serialize(),
-                    success: function(){
-                        table.ajax.reload();
-                        $('#income_form').trigger("reset")
-                        $("#exampleModal").modal("hide")
+                    success: function(res){
+                        if(res.errors){
+                            $('.alert-danger').html('');
+                            $.each(res.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
+                            });
+                        }else{
+                            table.ajax.reload();
+                            $('#income_form').trigger("reset")
+                            $("#exampleModal").modal("hide")
+                        }
                     }
                 })
             }else if($("#btnSubmit").val() == "update"){
@@ -203,10 +224,18 @@
                         '_method' : 'PUT',
                         '_token' : csrf_token
                     },
-                    success: function(){
-                        table.ajax.reload();
-                        $('#income_form').trigger("reset")
-                        $("#exampleModal").modal("hide")
+                    success: function(res){
+                        if(res.errors){
+                            $('.alert-danger').html('');
+                            $.each(res.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
+                            });
+                        }else{
+                            table.ajax.reload();
+                            $('#income_form').trigger("reset")
+                            $("#exampleModal").modal("hide")
+                        }
                     }
                 })
             }
@@ -238,6 +267,7 @@
                   },
             });
         }
+
 
 </script>
 @endsection

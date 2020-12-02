@@ -36,6 +36,11 @@
                 <h6 class="m-0 font-weight-bold text-primary">Tambah Data</h6>
             </div>
             <div class="card-body">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <form id="categoryForm" action="#" method="post">
                     @csrf
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
@@ -80,9 +85,17 @@
                     type: 'POST',
                     url: "{{route('kategori-pengeluaran.store')}}",
                     data: $('form').serialize(),
-                    success: function(){
-                        table.ajax.reload();
-                        $('#categoryForm').trigger("reset")
+                    success: function(res){
+                        if(res.errors){
+                            $('.alert-danger').html('');
+                            $.each(res.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
+                            });
+                        }else{
+                            table.ajax.reload();
+                            $('#categoryForm').trigger("reset")
+                        }
                     }
                 })
             }else if($("#btnSubmit").val() == "edit"){
@@ -96,9 +109,17 @@
                         '_method' : 'PUT',
                         '_token' : csrf_token
                     },
-                    success: function(){
-                        table.ajax.reload();
-                        $('#categoryForm').trigger("reset")
+                    success: function(res){
+                        if(res.errors){
+                            $('.alert-danger').html('');
+                            $.each(res.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
+                            });
+                        }else{
+                            table.ajax.reload();
+                            $('#categoryForm').trigger("reset")
+                        }
                     }
                 })
             }

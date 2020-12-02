@@ -69,11 +69,16 @@
             </button>
         </div>
         <div class="modal-body">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <form method="post" id="expense_form">
                 @csrf
                 <div class="input-group mb-3">
                     <select name="expense_category_id" class="custom-select expenseCategoryId">
-                        <option>Pilih Kategori Pengeluaran</option>
+                        <option disabled selected>Pilih Kategori Pengeluaran</option>
                         @foreach ($categories as $category)
                             <option class="expenseCategoryOption" value="{{$category->id}}">{{$category->category_name}}</option>
                         @endforeach
@@ -194,10 +199,18 @@
                     type: 'POST',
                     url: "{{route('pengeluaran.store')}}",
                     data: $('form').serialize(),
-                    success: function(){
-                        table.ajax.reload();
-                        $('#expense_form').trigger("reset")
-                        $("#exampleModal").modal("hide")
+                    success: function(res){
+                        if(res.errors){
+                            $('.alert-danger').html('');
+                            $.each(res.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
+                            });
+                        }else{
+                            table.ajax.reload();
+                            $('#expense_form').trigger("reset")
+                            $("#exampleModal").modal("hide")
+                        }
                     }
                 })
             }else if($("#btnSubmit").val() == "update"){
@@ -213,10 +226,18 @@
                         '_method' : 'PUT',
                         '_token' : csrf_token
                     },
-                    success: function(){
-                        table.ajax.reload();
-                        $('#expense_form').trigger("reset")
-                        $("#exampleModal").modal("hide")
+                    success: function(res){
+                        if(res.errors){
+                            $('.alert-danger').html('');
+                            $.each(res.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
+                            });
+                        }else{
+                            table.ajax.reload();
+                            $('#expense_form').trigger("reset")
+                            $("#exampleModal").modal("hide")
+                        }
                     }
                 })
             }

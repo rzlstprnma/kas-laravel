@@ -78,8 +78,8 @@ class IncomeController extends Controller
         if($validation->fails()){
             return response()->json([
                 'message' => 'Error, Ada kesalahan dalam pengisian Data',
-                'data'   => $validation->errors()
-            ],401);
+                'errors'   => $validation->errors()
+            ]);
         }else{
             Income::create([
                 'user_id' => $request->user_id,
@@ -131,8 +131,8 @@ class IncomeController extends Controller
         if($validation->fails()){
             return response()->json([
                 'message' => 'Error, Ada kesalahan dalam pengisian Data',
-                'data'   => $validation->errors()
-            ],401);
+                'errors'   => $validation->errors()
+            ]);
         }else{
             $now = Carbon::now()->toDateTime();
             $income = Income::find($id);

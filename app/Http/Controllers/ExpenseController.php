@@ -77,8 +77,8 @@ class ExpenseController extends Controller
         if($validation->fails()){
             return response()->json([
                 'message' => 'Error, Ada kesalahan dalam pengisian Data',
-                'data'   => $validation->errors()
-            ],401);
+                'errors'   => $validation->errors()
+            ]);
         }else{
             Expense::create([
                 'user_id' => $request->user_id,
@@ -132,8 +132,8 @@ class ExpenseController extends Controller
         if($validation->fails()){
             return response()->json([
                 'message' => 'Error, Ada kesalahan dalam pengisian Data',
-                'data'   => $validation->errors()
-            ],401);
+                'errors'   => $validation->errors()
+            ]);
         }else{
             $now = Carbon::now()->toDateTime();
             $expense = Expense::find($id);
@@ -157,9 +157,5 @@ class ExpenseController extends Controller
     public function destroy($id)
     {
         Expense::destroy($id);
-    }
-
-    public function report(){
-        return view('admin.expense_report');
     }
 }
