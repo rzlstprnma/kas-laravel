@@ -15,7 +15,7 @@
 <strong>Cara Menjalankan Aplikasi : </strong>
 <ul>
     <li>Simpan Project di /htdocs (kalau pake xampp)</li>
-    <li>import database (pr_laravelkas.sql)</li>
+    <li>import database (pr_kaslaravel.sql)</li>
     <li>jalankan "composer install" di dalam terminal/cmd</li>
     <li>buka folder project, copykan .env.example, menjadi .env</li>
     <li>isi DB_DATABASE, DB_USERNAME, DB_PASSWORD, sesuaikan dengan settingan database kamu</li>
